@@ -65,6 +65,7 @@
             font-weight: bold;
         }
 
+        /* Toast */
         .toast {
             position: fixed;
             top: -100px; left: 50%;
@@ -78,8 +79,32 @@
             pointer-events: none;
             transition: top 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
-
         .toast.show { top: 20px; }
+
+        /* Floating Icon */
+        .floating-tg {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #0088cc;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.5);
+            z-index: 999;
+            text-decoration: none;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 136, 204, 0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(0, 136, 204, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 136, 204, 0); }
+        }
 
         .container {
             width: 90%;
@@ -98,27 +123,13 @@
             border-radius: 20px;
             padding: 25px;
             text-align: center;
-            transition: 0.3s;
         }
-
-        .card:hover { transform: translateY(-5px); box-shadow: 0 0 20px var(--border-glow); }
 
         .diamonds { font-size: 28px; font-weight: bold; margin-bottom: 10px; color: var(--neon-color); }
-
         .price { font-size: 20px; margin-bottom: 20px; }
+        .btn { background: var(--neon-color); color: white; border: none; padding: 12px; border-radius: 25px; font-weight: bold; cursor: pointer; width: 100%; }
 
-        .btn {
-            background: var(--neon-color);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 25px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        /* Modals */
+        /* Modal Styles */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -129,54 +140,11 @@
             align-items: center;
             z-index: 100;
         }
-
         .modal-overlay.active { display: flex; }
+        .modal-content { background: var(--modal-bg); padding: 30px; border-radius: 25px; width: 95%; max-width: 450px; border: 1px solid var(--glass-border); position: relative; text-align: right; }
 
-        .modal-content {
-            background: var(--modal-bg);
-            padding: 30px;
-            border-radius: 25px;
-            width: 95%;
-            max-width: 450px;
-            border: 1px solid var(--glass-border);
-            position: relative;
-            text-align: right;
-        }
-
-        .payment-info {
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 15px;
-            margin: 15px 0;
-            font-size: 13px;
-            line-height: 1.6;
-            text-align: left;
-        }
-
-        .payment-info strong { color: var(--neon-color); }
-
-        /* Footer */
         footer { padding: 30px; text-align: center; width: 100%; }
-
         .dev-badge { color: #4cd964; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
-
-        .tg-link {
-            color: var(--text-color);
-            text-decoration: none;
-            font-size: 16px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(0, 136, 204, 0.1);
-            padding: 8px 15px;
-            border-radius: 15px;
-            border: 1px solid rgba(0, 136, 204, 0.3);
-        }
-
-        .tg-link i { color: #0088cc; font-size: 20px; }
-
-        .tg-link:hover { background: #0088cc; color: white; }
-        .tg-link:hover i { color: white; }
 
         .loader {
             display: none;
@@ -197,6 +165,10 @@
         <button class="theme-toggle" onclick="toggleTheme()">☀️ ساطع</button>
     </header>
 
+    <a href="https://t.me/VPN_Dzz" target="_blank" class="floating-tg">
+        <i class="fab fa-telegram-plane"></i>
+    </a>
+
     <div class="toast" id="welcomeToast">أهلاً بك في متجرنا! شحن سريع وآمن 🚀</div>
 
     <div class="container">
@@ -212,19 +184,19 @@
     <div class="modal-overlay" id="paymentModal">
         <div class="modal-content">
             <h3 style="text-align: center;">تفاصيل الدفع</h3>
-            <div class="payment-info">
+            <div class="payment-info" style="text-align: left; background: rgba(0,0,0,0.1); padding: 10px; border-radius: 10px; margin: 10px 0;">
                 <strong>Bybit ID:</strong> 398066215 <br>
-                <strong>Binance ID:</strong> 1203247691 <br><br>
-                <strong>BEP20:</strong><br> 0xc13120d26bcbd11114b3a1969ae48756b44b82cb <br><br>
-                <strong>TRC20:</strong><br> TK1fkcibgRrE2zUkHK5BHmpCtqBogwdheX
+                <strong>Binance ID:</strong> 1203247691 <br>
+                <strong>BEP20:</strong><br> <span style="font-size:10px">0xc13120d26bcbd11114b3a1969ae48756b44b82cb</span> <br>
+                <strong>TRC20:</strong><br> <span style="font-size:10px">TK1fkcibgRrE2zUkHK5BHmpCtqBogwdheX</span>
             </div>
-            <div style="margin-bottom:15px">
-                <label>ID اللاعب الخاص بك:</label>
-                <input type="text" id="playerId" style="width:100%; padding:10px; border-radius:10px; border:1px solid #ddd; margin-top:5px;">
+            <div style="margin-bottom:10px">
+                <label>ID اللاعب:</label>
+                <input type="text" id="playerId" style="width:100%; padding:8px; border-radius:8px; border:1px solid #ccc;">
             </div>
-            <div style="margin-bottom:15px">
-                <label>رفع صورة الدفع:</label>
-                <input type="file" id="paymentProof" style="margin-top:5px;">
+            <div style="margin-bottom:10px">
+                <label>صورة الدفع:</label>
+                <input type="file" id="paymentProof">
             </div>
             <div class="loader" id="submitLoader"></div>
             <button class="btn" id="submitBtn" onclick="submitOrder()">تم الدفع</button>
@@ -235,17 +207,15 @@
     <div class="modal-overlay" id="successModal">
         <div class="modal-content" style="text-align:center">
             <i class="fas fa-check-circle" style="font-size:50px; color:#4cd964"></i>
-            <h2 style="margin:15px 0">وصلتنا طلبيتك!</h2>
-            <p>سنعالج طلبك خلال دقائق. شكراً لك.</p>
+            <h2>وصلتنا طلبيتك!</h2>
             <button class="btn" onclick="closeModal('successModal')" style="margin-top:20px">إغلاق</button>
         </div>
     </div>
 
     <footer>
         <div class="dev-badge">تم التطوير بواسطة KABOS MILY</div>
-        <a href="https://t.me/DZ_AX" target="_blank" class="tg-link">
-            <i class="fab fa-telegram"></i>
-            تواصل معنا عبر تلغرام
+        <a href="https://t.me/DZ_AX" target="_blank" style="color:var(--text-color); text-decoration:none; font-size:12px;">
+            <i class="fab fa-telegram"></i> للتواصل الخاص
         </a>
     </footer>
 
