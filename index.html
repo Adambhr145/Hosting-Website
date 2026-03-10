@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FF VPN DZD - شحن فري فاير</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
 
@@ -27,13 +28,7 @@
             --glass-border: rgba(255, 255, 255, 0.1);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Tajawal', sans-serif;
-            transition: background 0.3s, color 0.3s;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; transition: 0.3s; }
 
         body {
             background-color: var(--bg-color);
@@ -46,7 +41,6 @@
             background-attachment: fixed;
         }
 
-        /* Header & Theme Toggle */
         header {
             width: 100%;
             padding: 20px;
@@ -55,18 +49,11 @@
             align-items: center;
             background: var(--card-bg);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--glass-border);
-            box-shadow: 0 0 15px var(--border-glow);
             z-index: 10;
         }
 
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            text-shadow: 0 0 10px var(--neon-color);
-            color: var(--text-color);
-        }
+        .logo { font-size: 24px; font-weight: bold; text-shadow: 0 0 10px var(--neon-color); }
 
         .theme-toggle {
             background: transparent;
@@ -78,28 +65,22 @@
             font-weight: bold;
         }
 
-        /* Toast Notification */
         .toast {
             position: fixed;
-            top: -100px;
-            left: 50%;
+            top: -100px; left: 50%;
             transform: translateX(-50%);
             background: var(--neon-color);
             color: white;
-            padding: 10px 20px;
+            padding: 10px 25px;
             border-radius: 30px;
             box-shadow: 0 0 20px var(--neon-color);
             z-index: 1000;
             pointer-events: none;
             transition: top 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            font-weight: bold;
         }
 
-        .toast.show {
-            top: 20px;
-        }
+        .toast.show { top: 20px; }
 
-        /* Products Grid */
         .container {
             width: 90%;
             max-width: 1000px;
@@ -113,57 +94,35 @@
         .card {
             background: var(--card-bg);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
             padding: 25px;
             text-align: center;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: 0.3s;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 20px var(--border-glow);
-        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 0 20px var(--border-glow); }
 
-        .diamonds {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: var(--neon-color);
-            text-shadow: 0 0 8px var(--border-glow);
-        }
+        .diamonds { font-size: 28px; font-weight: bold; margin-bottom: 10px; color: var(--neon-color); }
 
-        .price {
-            font-size: 20px;
-            margin-bottom: 20px;
-        }
+        .price { font-size: 20px; margin-bottom: 20px; }
 
         .btn {
             background: var(--neon-color);
             color: white;
             border: none;
-            padding: 10px 25px;
+            padding: 12px;
             border-radius: 25px;
-            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             width: 100%;
-            box-shadow: 0 0 10px var(--border-glow);
-            transition: 0.3s;
-        }
-
-        .btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px var(--neon-color);
         }
 
         /* Modals */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(5px);
             display: none;
             justify-content: center;
@@ -171,94 +130,60 @@
             z-index: 100;
         }
 
-        .modal-overlay.active {
-            display: flex;
-        }
+        .modal-overlay.active { display: flex; }
 
         .modal-content {
             background: var(--modal-bg);
             padding: 30px;
             border-radius: 25px;
-            width: 90%;
+            width: 95%;
             max-width: 450px;
             border: 1px solid var(--glass-border);
-            box-shadow: 0 0 30px var(--border-glow);
             position: relative;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 15px; right: 20px;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text-color);
+            text-align: right;
         }
 
         .payment-info {
             background: var(--card-bg);
             padding: 15px;
             border-radius: 15px;
-            margin-bottom: 15px;
-            font-size: 14px;
-            line-height: 1.8;
-            border: 1px solid var(--glass-border);
+            margin: 15px 0;
+            font-size: 13px;
+            line-height: 1.6;
+            text-align: left;
         }
 
         .payment-info strong { color: var(--neon-color); }
 
-        .input-group {
-            margin-bottom: 15px;
-            text-align: right;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid var(--glass-border);
-            background: var(--card-bg);
-            color: var(--text-color);
-            outline: none;
-        }
-
-        .input-group input[type="file"] {
-            padding: 8px;
-        }
-
         /* Footer */
-        footer {
-            margin-top: auto;
-            padding: 20px;
-            text-align: center;
-            width: 100%;
-        }
+        footer { padding: 30px; text-align: center; width: 100%; }
 
-        .dev-badge {
-            font-size: 12px;
-            color: #4cd964;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
+        .dev-badge { color: #4cd964; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
 
         .tg-link {
             color: var(--text-color);
             text-decoration: none;
-            font-size: 14px;
-            opacity: 0.8;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 136, 204, 0.1);
+            padding: 8px 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 136, 204, 0.3);
         }
 
-        .tg-link:hover {
-            color: var(--neon-color);
-        }
+        .tg-link i { color: #0088cc; font-size: 20px; }
 
-        /* Loading Spinner */
+        .tg-link:hover { background: #0088cc; color: white; }
+        .tg-link:hover i { color: white; }
+
         .loader {
             display: none;
-            border: 4px solid var(--card-bg);
-            border-top: 4px solid var(--neon-color);
+            border: 3px solid transparent;
+            border-top: 3px solid var(--neon-color);
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 25px; height: 25px;
             animation: spin 1s linear infinite;
             margin: 10px auto;
         }
@@ -272,181 +197,103 @@
         <button class="theme-toggle" onclick="toggleTheme()">☀️ ساطع</button>
     </header>
 
-    <div class="toast" id="welcomeToast">أهلاً بك في متجرنا! خيارات شحن سريعة وآمنة 🚀</div>
+    <div class="toast" id="welcomeToast">أهلاً بك في متجرنا! شحن سريع وآمن 🚀</div>
 
     <div class="container">
-        <div class="card">
-            <div class="diamonds">110 جوهرة</div>
-            <div class="price">1.2$</div>
-            <button class="btn" onclick="openPayment('110 جوهرة', '1.2$')">شراء</button>
-        </div>
-        <div class="card">
-            <div class="diamonds">231 جوهرة</div>
-            <div class="price">2.5$</div>
-            <button class="btn" onclick="openPayment('231 جوهرة', '2.5$')">شراء</button>
-        </div>
-        <div class="card">
-            <div class="diamonds">583 جوهرة</div>
-            <div class="price">6$</div>
-            <button class="btn" onclick="openPayment('583 جوهرة', '6$')">شراء</button>
-        </div>
-        <div class="card">
-            <div class="diamonds">1188 جوهرة</div>
-            <div class="price">11.5$</div>
-            <button class="btn" onclick="openPayment('1188 جوهرة', '11.5$')">شراء</button>
-        </div>
-        <div class="card">
-            <div class="diamonds">2420 جوهرة</div>
-            <div class="price">24$</div>
-            <button class="btn" onclick="openPayment('2420 جوهرة', '24$')">شراء</button>
-        </div>
-        <div class="card">
-            <div class="diamonds">عضوية أسبوعية</div>
-            <div class="price">3$</div>
-            <button class="btn" onclick="openPayment('عضوية أسبوعية', '3$')">شراء</button>
-        </div>
-        <div class="card">
-            <div class="diamonds">عضوية شهرية</div>
-            <div class="price">11.5$</div>
-            <button class="btn" onclick="openPayment('عضوية شهرية', '11.5$')">شراء</button>
-        </div>
+        <div class="card"><div class="diamonds">110 جوهرة</div><div class="price">1.2$</div><button class="btn" onclick="openPayment('110 جوهرة', '1.2$')">شراء</button></div>
+        <div class="card"><div class="diamonds">231 جوهرة</div><div class="price">2.5$</div><button class="btn" onclick="openPayment('231 جوهرة', '2.5$')">شراء</button></div>
+        <div class="card"><div class="diamonds">583 جوهرة</div><div class="price">6$</div><button class="btn" onclick="openPayment('583 جوهرة', '6$')">شراء</button></div>
+        <div class="card"><div class="diamonds">1188 جوهرة</div><div class="price">11.5$</div><button class="btn" onclick="openPayment('1188 جوهرة', '11.5$')">شراء</button></div>
+        <div class="card"><div class="diamonds">2420 جوهرة</div><div class="price">24$</div><button class="btn" onclick="openPayment('2420 جوهرة', '24$')">شراء</button></div>
+        <div class="card"><div class="diamonds">عضوية أسبوعية</div><div class="price">3$</div><button class="btn" onclick="openPayment('عضوية أسبوعية', '3$')">شراء</button></div>
+        <div class="card"><div class="diamonds">عضوية شهرية</div><div class="price">11.5$</div><button class="btn" onclick="openPayment('عضوية شهرية', '11.5$')">شراء</button></div>
     </div>
 
     <div class="modal-overlay" id="paymentModal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('paymentModal')">&times;</span>
-            <h3 style="text-align: center; margin-bottom: 15px;">يرجى إرسال الأموال عبر الطريقة التي تناسبك</h3>
-            
+            <h3 style="text-align: center;">تفاصيل الدفع</h3>
             <div class="payment-info">
-                <strong>Paybit ID:</strong> 398066215 <br>
+                <strong>Bybit ID:</strong> 398066215 <br>
                 <strong>Binance ID:</strong> 1203247691 <br><br>
-                <strong>عنوان شبكة BEP20:</strong><br> <span style="font-size:12px; word-wrap: break-word;">0xc13120d26bcbd11114b3a1969ae48756b44b82cb</span><br><br>
-                <strong>عنوان شبكة TRC20:</strong><br> <span style="font-size:12px; word-wrap: break-word;">TK1fkcibgRrE2zUkHK5BHmpCtqBogwdheX</span>
+                <strong>BEP20:</strong><br> 0xc13120d26bcbd11114b3a1969ae48756b44b82cb <br><br>
+                <strong>TRC20:</strong><br> TK1fkcibgRrE2zUkHK5BHmpCtqBogwdheX
             </div>
-
-            <div class="input-group">
+            <div style="margin-bottom:15px">
                 <label>ID اللاعب الخاص بك:</label>
-                <input type="text" id="playerId" placeholder="أدخل الآيدي هنا..." required>
+                <input type="text" id="playerId" style="width:100%; padding:10px; border-radius:10px; border:1px solid #ddd; margin-top:5px;">
             </div>
-            
-            <div class="input-group">
-                <label>رفع صورة الدفع (إيصال التحويل):</label>
-                <input type="file" id="paymentProof" accept="image/*">
+            <div style="margin-bottom:15px">
+                <label>رفع صورة الدفع:</label>
+                <input type="file" id="paymentProof" style="margin-top:5px;">
             </div>
-
             <div class="loader" id="submitLoader"></div>
             <button class="btn" id="submitBtn" onclick="submitOrder()">تم الدفع</button>
+            <button onclick="closeModal('paymentModal')" style="background:none; border:none; color:var(--text-color); width:100%; margin-top:10px; cursor:pointer;">إلغاء</button>
         </div>
     </div>
 
     <div class="modal-overlay" id="successModal">
-        <div class="modal-content" style="text-align: center;">
-            <span class="close-btn" onclick="closeModal('successModal')">&times;</span>
-            <div style="font-size: 50px; margin-bottom: 15px;">✅</div>
-            <h2 style="color: var(--neon-color); margin-bottom: 10px;">لقد وصلتنا طلبيتك</h2>
-            <p>سنعالج طلبك خلال دقائق. شكراً لثقتك بنا!</p>
+        <div class="modal-content" style="text-align:center">
+            <i class="fas fa-check-circle" style="font-size:50px; color:#4cd964"></i>
+            <h2 style="margin:15px 0">وصلتنا طلبيتك!</h2>
+            <p>سنعالج طلبك خلال دقائق. شكراً لك.</p>
+            <button class="btn" onclick="closeModal('successModal')" style="margin-top:20px">إغلاق</button>
         </div>
     </div>
 
     <footer>
         <div class="dev-badge">تم التطوير بواسطة KABOS MILY</div>
-        <a href="https://t.me/DZ_AX" target="_blank" class="tg-link">للتواصل: https://t.me/DZ_AX</a>
+        <a href="https://t.me/DZ_AX" target="_blank" class="tg-link">
+            <i class="fab fa-telegram"></i>
+            تواصل معنا عبر تلغرام
+        </a>
     </footer>
 
     <script>
-        // Theme Toggle
         function toggleTheme() {
-            const body = document.body;
+            const b = document.body;
             const btn = document.querySelector('.theme-toggle');
-            if (body.getAttribute('data-theme') === 'dark') {
-                body.setAttribute('data-theme', 'light');
-                btn.innerHTML = '🌙 داكن';
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                btn.innerHTML = '☀️ ساطع';
-            }
+            const isDark = b.getAttribute('data-theme') === 'dark';
+            b.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            btn.innerHTML = isDark ? '🌙 داكن' : '☀️ ساطع';
         }
 
-        // Welcome Toast Logic
         setTimeout(() => {
-            const toast = document.getElementById('welcomeToast');
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 4000); 
-        }, 2000); 
+            const t = document.getElementById('welcomeToast');
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 4000);
+        }, 2000);
 
-        // Modal Logic
-        let currentOffer = '';
-        let currentPrice = '';
+        let curOff = '', curPri = '';
+        function openPayment(o, p) { curOff = o; curPri = p; document.getElementById('paymentModal').classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-        function openPayment(offer, price) {
-            currentOffer = offer;
-            currentPrice = price;
-            document.getElementById('playerId').value = '';
-            document.getElementById('paymentProof').value = '';
-            document.getElementById('paymentModal').classList.add('active');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
-
-        // Telegram Bot Logic
         async function submitOrder() {
-            const playerId = document.getElementById('playerId').value.trim();
-            const fileInput = document.getElementById('paymentProof');
-            
-            if (!playerId) {
-                alert("يرجى إدخال ID اللاعب الخاص بك أولاً.");
-                return;
-            }
+            const pid = document.getElementById('playerId').value;
+            const file = document.getElementById('paymentProof').files[0];
+            if(!pid) return alert("أدخل ID اللاعب!");
 
-            const botToken = "8488710993:AAHWnES-ReQ5vew5Yi4BSVHGTZ83ZbiidfE";
-            const chatId = "6671521979";
-            
-            const captionText = `🔥 طلب شحن جديد! 🔥\n\n📦 العرض المطلوب: ${currentOffer}\n💰 السعر: ${currentPrice}\n🎮 آيدي اللاعب: ${playerId}`;
-            
-            const submitBtn = document.getElementById('submitBtn');
-            const loader = document.getElementById('submitLoader');
-            
-            submitBtn.style.display = 'none';
-            loader.style.display = 'block';
+            const btn = document.getElementById('submitBtn');
+            const ldr = document.getElementById('submitLoader');
+            btn.style.display = 'none'; ldr.style.display = 'block';
+
+            const token = "8488710993:AAHWnES-ReQ5vew5Yi4BSVHGTZ83ZbiidfE";
+            const chat = "6671521979";
+            const msg = `📦 طلب جديد\n💎 العرض: ${curOff}\n💵 السعر: ${curPri}\n🆔 الآيدي: ${pid}`;
 
             try {
-                if (fileInput.files.length > 0) {
-                    const formData = new FormData();
-                    formData.append("chat_id", chatId);
-                    formData.append("photo", fileInput.files[0]);
-                    formData.append("caption", captionText);
-
-                    await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
-                        method: "POST",
-                        body: formData
-                    });
+                if(file) {
+                    const fd = new FormData();
+                    fd.append("chat_id", chat); fd.append("photo", file); fd.append("caption", msg);
+                    await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: "POST", body: fd });
                 } else {
-                    const formData = new FormData();
-                    formData.append("chat_id", chatId);
-                    formData.append("text", captionText + "\n\n⚠️ ملاحظة: الزبون لم يقم بإرفاق صورة الدفع.");
-
-                    await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-                        method: "POST",
-                        body: formData
-                    });
+                    await fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat}&text=${encodeURIComponent(msg)}`);
                 }
-
                 closeModal('paymentModal');
                 document.getElementById('successModal').classList.add('active');
-
-            } catch (error) {
-                alert("حدث خطأ أثناء إرسال الطلب، يرجى المحاولة لاحقاً.");
-                console.error(error);
-            } finally {
-                submitBtn.style.display = 'block';
-                loader.style.display = 'none';
-            }
+            } catch(e) { alert("حدث خطأ"); }
+            btn.style.display = 'block'; ldr.style.display = 'none';
         }
     </script>
-
 </body>
 </html>
